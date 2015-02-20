@@ -67,6 +67,12 @@ class Chisel
     end.join(" ")
   end
 
+  def strong_wraps(input)
+    result = emphasis_wraps(input)
+    result = result.gsub("<em>*", "<strong>")
+    result = result.gsub("*</em>", "</strong>")
+  end
+
   # Within either a header or a paragraph, any word or words wrapped in *
   # should be enclosed in <em> tags
   # Within either a header or a paragraph, any word or words wrapped in **

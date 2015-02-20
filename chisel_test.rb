@@ -49,7 +49,7 @@ class ChiselTest < Minitest::Test
 
   def test_strong_wraps_work
     chisel = Chisel.new
-    assert_equal "I am woman hear me <strong>ROAR</strong>!", chisel.strong_wraps("I am woman hear me **ROAR**
+    assert_equal "I am woman hear me <strong>ROAR</strong> !!!", chisel.strong_wraps("I am woman hear me **ROAR** !!!")
   end
 
 end
