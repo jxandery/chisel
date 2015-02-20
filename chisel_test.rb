@@ -67,6 +67,5 @@ class ChiselTest < Minitest::Test
     assert_equal "My <em>emphasized and <strong>stronged</strong> text</em> is awesome.", chisel.wraps("My *emphasized and **stronged** text* is awesome.")
   end
 
-
 end
 

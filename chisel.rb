@@ -7,24 +7,21 @@ class Chisel
     @counter = 0
   end
 
-  # Level 1 - Formatting
-  # identify chunks of text using "\n"
   def id_chunks(input)
      @result = input.split("\n\n")
-     # ["# Level 2", "- Formatting"]
   end
 
   def header_tags(input)
    chunks = input.split
    count = chunks[0].count("#")
    chunks[0] = ("<h#{count}>")
-   chunks.push("</h#{count}>")
+   chunks.push("</h#{count}>\n\n")
    chunks
   end
 
   def paragraph_tags(input)
    chunks = input.split
-   chunks.unshift("\n\n<p>\n")
+   chunks.unshift("<p>\n ")
    chunks.push("\n</p>")
    chunks
   end
@@ -71,13 +68,13 @@ class Chisel
     end.join(" ")
   end
 
-  def wraps(input) # account for *what, what*, **in, butt**
-    chunks = input.split # [*what, what*, **in, butt**]
+  def wraps(input)
+    chunks = input.split
     chunks.map  do |chunk|
       if chunk.include?("**")
-        strong_wraps(chunk) # [<strong>,i,n] [b,u,t,t,</strong>]
+        strong_wraps(chunk)
       elsif chunk.include?("*")
-        emphasis_wraps(chunk) # [<em>,w,h,a,t] [w,h,a,t,</em>]
+        emphasis_wraps(chunk)
       else
         chunk
       end
@@ -103,27 +100,22 @@ class Chisel
     end.join(" ")
   end
 
-  # Level 3 - Lists
-  #
-  # Often in writing we want to create unordered (bullet) or ordered (numbered) lists.
-  #
-  # Build support for unordered lists like this:
-  #
-  # My favorite cuisines are:
-  #
-  # * Sushi
-  # * Barbeque
-  # * Mexican
+  def parse(input)
+    chunks = input.split("\n\n")
+    chunks.map do |chunk|
+      html_tags(wraps(chunk))
+    end
+  end
 
 end
 
 document = '# My Life in Desserts
 
 ## Chapter 1: The Beginning
-#
-#"You just *have* to try the cheesecake," he said. "Ever since it appeared in
-#**Food & Wine** this place has been packed every night."'
-#
-#parser = Chisel.new
-#output = parser.parse(document)
-#puts output
+
+"You just *have* to try the cheesecake," he said. "Ever since it appeared in
+**Food & Wine** this place has been packed every night."'
+
+parser = Chisel.new
+output = parser.parse(document)
+puts output
