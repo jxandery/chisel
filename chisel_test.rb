@@ -47,10 +47,17 @@ class ChiselTest < Minitest::Test
     assert_equal "What happens in <em>Vegas</em> ...", chisel.emphasis_wraps("What happens in *Vegas* ...")
   end
 
-  def test_strong_wraps_work
+  def test_strong_wraps_work_with_single_word
     chisel = Chisel.new
     assert_equal "I am woman hear me <strong>ROAR</strong> !!!", chisel.strong_wraps("I am woman hear me **ROAR** !!!")
   end
+
+  def test_strong_wraps_work_with_multiple_words
+    chisel = Chisel.new
+    assert_equal "I am <strong>WOMAN HEAR ME</strong> now !!!", chisel.strong_wraps("I am **WOMAN HEAR ME** now !!!")
+
+  end
+
 
 end
 

@@ -43,24 +43,41 @@ class Chisel
 
   def html_tags(input)
     chunks = input.split("\n")
-    result = chunks.map do |chunk|
+    chunks.map do |chunk|
       if chunk[0].include?("#")
         proper_spacing(header_tags(chunk))
       else
         proper_spacing(paragraph_tags(chunk))
       end
-    end
-    result.join
+    end.join
   end
 
   def emphasis_wraps(input)
-    chunks = input.split
-    result = chunks.map.each_with_index do |chunk, index|
-      if chunk.include?("*")
-        chunk = chunk.chars
-        chunk[0] = "<em>"
-        chunk[-1] = "</em>"
-        chunk.join
+    chunk = input.split
+    chunk = chunk.map do |word|
+      if word[0] == "*"
+        word.sub("*", "<em>")
+      else
+        word
+      end
+    end
+
+    chunk = chunk.map do |word|
+      if word[-1] == "*"
+        word.sub("*", "</em>")
+      else
+        word
+      end
+    end.join(" ")
+  end
+
+  def wraps(input) # account for *what, what*, **in, butt**
+    chunks = input.split # [*what, what*, **in, butt**]
+    chunks.map  do |chunk|
+      if chunk.include?("**")
+        strong_wraps(word) # [<strong>,i,n] [b,u,t,t,</strong>]
+      elsif chunk.include?("*")
+        emphasis_wraps(word) # [<em>,w,h,a,t] [w,h,a,t,</em>]
       else
         chunk
       end
@@ -68,18 +85,24 @@ class Chisel
   end
 
   def strong_wraps(input)
-    result = emphasis_wraps(input)
-    result = result.gsub("<em>*", "<strong>")
-    result = result.gsub("*</em>", "</strong>")
+    chunk = input.split
+    chunk = chunk.map do |word|
+      if word[0..1] == "**"
+        word.sub("**", "<strong>")
+      else
+        word
+      end
+    end
+
+    chunk = chunk.map do |word|
+      if word[-2..-1] == "**"
+        word.sub("**", "</strong>")
+      else
+        word
+      end
+    end.join(" ")
   end
 
-  # Within either a header or a paragraph, any word or words wrapped in *
-  # should be enclosed in <em> tags
-  # Within either a header or a paragraph, any word or words wrapped in **
-  # should be enclosed in <strong> tags
-  # For extra challenge, consider scenarios like this: My *emphasized and **
-  # stronged** text* is awesome.
-  #
   # Level 3 - Lists
   #
   # Often in writing we want to create unordered (bullet) or ordered (numbered) lists.
