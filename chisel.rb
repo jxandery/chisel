@@ -75,9 +75,9 @@ class Chisel
     chunks = input.split # [*what, what*, **in, butt**]
     chunks.map  do |chunk|
       if chunk.include?("**")
-        strong_wraps(word) # [<strong>,i,n] [b,u,t,t,</strong>]
+        strong_wraps(chunk) # [<strong>,i,n] [b,u,t,t,</strong>]
       elsif chunk.include?("*")
-        emphasis_wraps(word) # [<em>,w,h,a,t] [w,h,a,t,</em>]
+        emphasis_wraps(chunk) # [<em>,w,h,a,t] [w,h,a,t,</em>]
       else
         chunk
       end

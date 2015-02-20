@@ -42,9 +42,14 @@ class ChiselTest < Minitest::Test
     chisel.proper_spacing("# Level 2 Chapter 1".split)
   end
 
-  def test_emphasis_wraps_work
+  def test_emphasis_wraps_work_with_single_word
     chisel = Chisel.new
     assert_equal "What happens in <em>Vegas</em> ...", chisel.emphasis_wraps("What happens in *Vegas* ...")
+  end
+
+  def test_emphasis_wraps_work_with_multiple_words
+    chisel = Chisel.new
+    assert_equal "What <em>happens in Vegas</em> ...", chisel.emphasis_wraps("What *happens in Vegas* ...")
   end
 
   def test_strong_wraps_work_with_single_word
@@ -55,7 +60,11 @@ class ChiselTest < Minitest::Test
   def test_strong_wraps_work_with_multiple_words
     chisel = Chisel.new
     assert_equal "I am <strong>WOMAN HEAR ME</strong> now !!!", chisel.strong_wraps("I am **WOMAN HEAR ME** now !!!")
+  end
 
+  def test_strong_and_emphasis_wraps_work_together_with_multiple_words
+    chisel = Chisel.new
+    assert_equal "My <em>emphasized and <strong>stronged</strong> text</em> is awesome.", chisel.wraps("My *emphasized and **stronged** text* is awesome.")
   end
 
 
